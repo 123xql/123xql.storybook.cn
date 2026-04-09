@@ -2,7 +2,6 @@ import { computed, inject } from '@angular/core';
 import {
   debounceTime,
   distinctUntilChanged,
-  lastValueFrom,
   pipe,
   switchMap,
   tap,
@@ -45,6 +44,7 @@ export const BookSearchStore = signalStore(
       );
     }),
   })),
+  // BooksService can be injected within the withMethodsfactory.
   withMethods((store, bookService = inject(BookService)) => ({
     updateQuery(query: string): void {
       patchState(store, (state) => ({
@@ -58,8 +58,13 @@ export const BookSearchStore = signalStore(
     },
     async loadAllBooks(): Promise<void> {
       patchState(store, { isLoading: true });
-      const books = await lastValueFrom( bookService.loadAllBooks()) ;
-      patchState(store, { books: books, isLoading: false });
+      try{  
+        const books = await bookService.loadAllBooks();
+        patchState(store, { books: books, isLoading: false });
+      }catch(error){
+        console.error("错误:", error);
+        patchState(store, { isLoading: false});
+      }    
     },
     loadByQuery: rxMethod<string>(
       pipe(
@@ -70,9 +75,7 @@ export const BookSearchStore = signalStore(
           return bookService.getByQuery(query).pipe(
             tapResponse({
               next: (books) => patchState(store, { books }),
-              error: (error) => {
-                console.error(error);
-              },
+              error: (error) =>{console.error("错误:", error);},
               finalize: () => patchState(store, { isLoading: false }),
             })
           );

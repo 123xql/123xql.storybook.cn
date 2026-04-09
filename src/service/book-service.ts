@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Book } from '../model/book';
-import { Observable } from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +18,7 @@ export class BookService {
     return this.http.get<Book[]>(`${this.apiUrl}/${query}`, this.httpOptions);
   }
 
-  loadAllBooks(): Observable<Book[]> {
-    return this.http.get<Book[]>(this.apiUrl, this.httpOptions);
+  loadAllBooks(): Promise<Book[]> {
+    return lastValueFrom(this.http.get<Book[]>(this.apiUrl, this.httpOptions));
   }
 }
