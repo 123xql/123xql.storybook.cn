@@ -17,3 +17,25 @@
     <!-- 👇 Nested signals are created as `DeepSignal` properties. -->
     <p>Query: {{ store.filter.query() }}</p>
     <p>Order: {{ store.filter.order() }}</p>
+    <p>Books Count: {{ store.booksCount() }}</p>
+
+<form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+  <div>
+    <app-form-component
+      [formControl]="name"
+      [placeholder]="placeholder">
+    </app-form-component>
+
+    <app-form-component
+      [formControl]="id"
+      [placeholder]="placeholder">
+    </app-form-component>
+  </div>
+
+  <div>
+    <button type="submit">Submit</button>
+  </div>
+
+</form>
+
+

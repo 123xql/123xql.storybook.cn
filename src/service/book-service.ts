@@ -8,7 +8,7 @@ import { lastValueFrom, Observable } from 'rxjs';
 })
 export class BookService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://10.148.51.54:8080/searchBook';
+  private apiUrl = 'http://localhost:8080/searchBook';
   private readonly httpOptions = {
     headers: {
       'Content-Type': 'application/json'

@@ -18,17 +18,18 @@ import { tapResponse } from '@ngrx/operators';
 import { Book } from '../../model/book';
 import { BookService } from '../../service/book-service';
 
-
 type BookSearchState = {
   books: Book[];
   isLoading: boolean;
   filter: { query: string; order: 'asc' | 'desc' };
+  action: string | null;
 };
 
 const initialState: BookSearchState = {
   books: [],
   isLoading: false,
   filter: { query: '', order: 'asc' },
+  action: null,
 };
 
 export const BookSearchStore = signalStore(
@@ -38,7 +39,6 @@ export const BookSearchStore = signalStore(
     booksCount: computed(() => books().length),
     sortedBooks: computed(() => {
       const direction = filter.order() === 'asc' ? 1 : -1;
-
       return books().sort(
         (a, b) => direction * a.title.localeCompare(b.title)
       );
@@ -57,25 +57,29 @@ export const BookSearchStore = signalStore(
       }));
     },
     async loadAllBooks(): Promise<void> {
-      patchState(store, { isLoading: true });
-      try{  
+      try {
         const books = await bookService.loadAllBooks();
         patchState(store, { books: books, isLoading: false });
-      }catch(error){
+      } catch (error) {
         console.error("错误:", error);
-        patchState(store, { isLoading: false});
-      }    
+        patchState(store, { isLoading: false, action: 'loadAllError' });
+      }
     },
     loadByQuery: rxMethod<string>(
       pipe(
         debounceTime(300),
         distinctUntilChanged(),
-        tap(() => patchState(store, { isLoading: true })),
+        tap(() => patchState(store, { isLoading: true , action: null })),
         switchMap((query) => {
           return bookService.getByQuery(query).pipe(
             tapResponse({
-              next: (books) => patchState(store, { books }),
-              error: (error) =>{console.error("错误:", error);},
+              next: (books) => {
+                patchState(store, {books: books, action: 'loadByQuerySuccessfully'});
+              },
+              error: (error) => { 
+                console.error("错误:", error); 
+                patchState(store, { action: 'loadByQueryError' });
+              },
               finalize: () => patchState(store, { isLoading: false }),
             })
           );

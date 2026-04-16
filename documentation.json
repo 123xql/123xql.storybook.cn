@@ -1,0 +1,986 @@
+{
+    "pipes": [],
+    "interfaces": [
+        {
+            "name": "Book",
+            "id": "interface-Book-fea7154392ff923987602527d119a33d8c3328dc77da112fdcddb37e48180a04697afd43e95648d67a9fc9f05840633153dab396dcdbe581c12ad30448691b8e",
+            "file": "src/model/book.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "interface",
+            "sourceCode": "export interface Book {\r\n    id: number;\r\n    title: string;\r\n    authors: string[];\r\n    date: string;\r\n}\r\n\r\n",
+            "properties": [
+                {
+                    "name": "authors",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string[]",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 4
+                },
+                {
+                    "name": "date",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 5
+                },
+                {
+                    "name": "id",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "number",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 2
+                },
+                {
+                    "name": "title",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 3
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 172,
+            "methods": [],
+            "extends": []
+        },
+        {
+            "name": "User",
+            "id": "interface-User-1609b7226ce250220272e82ea77bad0a48f9c54b944bb80d287f3ef9f6f129e8691475b5108eac41a523430fb845e8f58c07031355b10333be88568ecdd70043",
+            "file": "src/app/app.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "interface",
+            "sourceCode": "import { ChangeDetectionStrategy, Component, inject, effect, computed, viewChild, viewChildren } from '@angular/core';\r\nimport { BookSearchStore } from '../store/book-store/book-search-store';\r\nimport { CommonModule } from '@angular/common';\r\nimport { FormBuilder, FormGroup, FormsModule, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';\r\nimport { FormComponent } from \"./component/form-component/form-component\";\r\n\r\nexport interface User {\r\n  id: number;\r\n  name: string;\r\n  sex: string;\r\n  city: string;\r\n  hobby: string;\r\n}\r\n\r\n@Component({\r\n  selector: 'app-root',\r\n  imports: [CommonModule, FormsModule, FormComponent, ReactiveFormsModule],\r\n  templateUrl: './app.html',\r\n  styleUrl: './app.scss',\r\n  providers: [BookSearchStore],\r\n  changeDetection: ChangeDetectionStrategy.OnPush,\r\n})\r\nexport class App {\r\n  readonly store = inject(BookSearchStore);\r\n  myQuery = '';\r\n  placeholder = '请输入姓名';\r\n  head = viewChildren(FormComponent);\r\n  header = computed(() => this.head().map(item => item.value));\r\n\r\n  contactForm: FormGroup;\r\n  constructor(private fb: FormBuilder) {\r\n    this.contactForm = this.fb.group({\r\n      name: new FormControl(\"张三\", Validators.required),\r\n      id: new FormControl(\"123456\", Validators.required)\r\n    });\r\n    this.init();\r\n    effect(() => {\r\n      const action = this.store.action(); \r\n      if(action === 'loadAllSuccessfully') {\r\n        console.log('加载全部信息，成功执行了books更新操作');\r\n      }\r\n      if(action === 'loadByQuerySuccessfully') {\r\n        console.log('查询信息，成功执行了books更新操作');\r\n      }\r\n      if(action === 'loadByQueryError') {\r\n        console.log('查询信息，失败执行了books更新操作');\r\n      }\r\n      if(action === 'loadAllError') {\r\n        console.log('加载全部信息，失败执行了books更新操作');\r\n      }\r\n    });\r\n  }\r\n\r\n  async init(){\r\n    try{\r\n      await this.store.loadAllBooks();\r\n      console.log('Books loaded successfully:', this.store.books());\r\n    }catch(error){\r\n      console.error('Failed to load books:', error);\r\n    }  \r\n  }\r\n\r\n  onSearch() {\r\n    this.store.updateQuery(this.myQuery);\r\n    this.store.loadByQuery(this.myQuery);\r\n  }\r\n\r\n  onSubmit() {\r\n    console.log(\"打印元素值：\", this.header());\r\n  }\r\n\r\n  get name() {\r\n    return this.contactForm.get('name') as FormControl;\r\n  }\r\n\r\n  get id() {\r\n    return this.contactForm.get('id') as FormControl;\r\n  }\r\n}",
+            "properties": [
+                {
+                    "name": "city",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 11
+                },
+                {
+                    "name": "hobby",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 12
+                },
+                {
+                    "name": "id",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "number",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 8
+                },
+                {
+                    "name": "name",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 9
+                },
+                {
+                    "name": "sex",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 10
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 172,
+            "methods": [],
+            "extends": []
+        }
+    ],
+    "injectables": [
+        {
+            "name": "BookService",
+            "id": "injectable-BookService-bbdae34337a2467fc8a719677ff99d1aa888d4f3d64f8165212621cb16d7b07e5d62568d381f8fccc89c6b53701cb445be3612c3372252ef1d810eebdaed6827",
+            "file": "src/service/book-service.ts",
+            "properties": [
+                {
+                    "name": "apiUrl",
+                    "defaultValue": "'http://localhost:8080/searchBook'",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 11,
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "http",
+                    "defaultValue": "inject(HttpClient)",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "unknown",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 10,
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "httpOptions",
+                    "defaultValue": "{\r\n    headers: {\r\n      'Content-Type': 'application/json'\r\n    }\r\n  }",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "object",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 12,
+                    "modifierKind": [
+                        123,
+                        148
+                    ]
+                }
+            ],
+            "methods": [
+                {
+                    "name": "getByQuery",
+                    "args": [
+                        {
+                            "name": "query",
+                            "type": "string",
+                            "optional": false,
+                            "dotDotDotToken": false,
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "Observable<Book[]>",
+                    "typeParameters": [],
+                    "line": 17,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "query",
+                            "type": "string",
+                            "optional": false,
+                            "dotDotDotToken": false,
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "loadAllBooks",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "Promise<Book[]>",
+                    "typeParameters": [],
+                    "line": 21,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "description": "",
+            "rawdescription": "\n",
+            "sourceCode": "import { HttpClient } from '@angular/common/http';\r\nimport { inject, Injectable } from '@angular/core';\r\nimport { Book } from '../model/book';\r\nimport { lastValueFrom, Observable } from 'rxjs';\r\n\r\n@Injectable({\r\n  providedIn: 'root',\r\n})\r\nexport class BookService {\r\n  private http = inject(HttpClient);\r\n  private apiUrl = 'http://localhost:8080/searchBook';\r\n  private readonly httpOptions = {\r\n    headers: {\r\n      'Content-Type': 'application/json'\r\n    }\r\n  };\r\n  getByQuery(query: string): Observable<Book[]> {\r\n    return this.http.get<Book[]>(`${this.apiUrl}/${query}`, this.httpOptions);\r\n  }\r\n\r\n  loadAllBooks(): Promise<Book[]> {\r\n    return lastValueFrom(this.http.get<Book[]>(this.apiUrl, this.httpOptions));\r\n  }\r\n}\r\n",
+            "extends": [],
+            "type": "injectable"
+        }
+    ],
+    "guards": [],
+    "interceptors": [],
+    "classes": [],
+    "directives": [],
+    "components": [
+        {
+            "name": "App",
+            "id": "component-App-1609b7226ce250220272e82ea77bad0a48f9c54b944bb80d287f3ef9f6f129e8691475b5108eac41a523430fb845e8f58c07031355b10333be88568ecdd70043",
+            "file": "src/app/app.ts",
+            "changeDetection": "ChangeDetectionStrategy.OnPush",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [
+                {
+                    "name": "BookSearchStore"
+                }
+            ],
+            "selector": "app-root",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./app.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "contactForm",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "FormGroup",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 30
+                },
+                {
+                    "name": "head",
+                    "defaultValue": "viewChildren(FormComponent)",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "unknown",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 27
+                },
+                {
+                    "name": "header",
+                    "defaultValue": "computed(() => this.head().map(item => item.value))",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "unknown",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 28
+                },
+                {
+                    "name": "myQuery",
+                    "defaultValue": "''",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 25
+                },
+                {
+                    "name": "placeholder",
+                    "defaultValue": "'请输入姓名'",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 26
+                },
+                {
+                    "name": "store",
+                    "defaultValue": "inject(BookSearchStore)",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "unknown",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 24,
+                    "modifierKind": [
+                        148
+                    ]
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "init",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 54,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        134
+                    ]
+                },
+                {
+                    "name": "onSearch",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 63,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "onSubmit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 68,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "CommonModule",
+                    "type": "module"
+                },
+                {
+                    "name": "FormsModule",
+                    "type": "module"
+                },
+                {
+                    "name": "FormComponent",
+                    "type": "component"
+                },
+                {
+                    "name": "ReactiveFormsModule",
+                    "type": "module"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { ChangeDetectionStrategy, Component, inject, effect, computed, viewChild, viewChildren } from '@angular/core';\r\nimport { BookSearchStore } from '../store/book-store/book-search-store';\r\nimport { CommonModule } from '@angular/common';\r\nimport { FormBuilder, FormGroup, FormsModule, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';\r\nimport { FormComponent } from \"./component/form-component/form-component\";\r\n\r\nexport interface User {\r\n  id: number;\r\n  name: string;\r\n  sex: string;\r\n  city: string;\r\n  hobby: string;\r\n}\r\n\r\n@Component({\r\n  selector: 'app-root',\r\n  imports: [CommonModule, FormsModule, FormComponent, ReactiveFormsModule],\r\n  templateUrl: './app.html',\r\n  styleUrl: './app.scss',\r\n  providers: [BookSearchStore],\r\n  changeDetection: ChangeDetectionStrategy.OnPush,\r\n})\r\nexport class App {\r\n  readonly store = inject(BookSearchStore);\r\n  myQuery = '';\r\n  placeholder = '请输入姓名';\r\n  head = viewChildren(FormComponent);\r\n  header = computed(() => this.head().map(item => item.value));\r\n\r\n  contactForm: FormGroup;\r\n  constructor(private fb: FormBuilder) {\r\n    this.contactForm = this.fb.group({\r\n      name: new FormControl(\"张三\", Validators.required),\r\n      id: new FormControl(\"123456\", Validators.required)\r\n    });\r\n    this.init();\r\n    effect(() => {\r\n      const action = this.store.action(); \r\n      if(action === 'loadAllSuccessfully') {\r\n        console.log('加载全部信息，成功执行了books更新操作');\r\n      }\r\n      if(action === 'loadByQuerySuccessfully') {\r\n        console.log('查询信息，成功执行了books更新操作');\r\n      }\r\n      if(action === 'loadByQueryError') {\r\n        console.log('查询信息，失败执行了books更新操作');\r\n      }\r\n      if(action === 'loadAllError') {\r\n        console.log('加载全部信息，失败执行了books更新操作');\r\n      }\r\n    });\r\n  }\r\n\r\n  async init(){\r\n    try{\r\n      await this.store.loadAllBooks();\r\n      console.log('Books loaded successfully:', this.store.books());\r\n    }catch(error){\r\n      console.error('Failed to load books:', error);\r\n    }  \r\n  }\r\n\r\n  onSearch() {\r\n    this.store.updateQuery(this.myQuery);\r\n    this.store.loadByQuery(this.myQuery);\r\n  }\r\n\r\n  onSubmit() {\r\n    console.log(\"打印元素值：\", this.header());\r\n  }\r\n\r\n  get name() {\r\n    return this.contactForm.get('name') as FormControl;\r\n  }\r\n\r\n  get id() {\r\n    return this.contactForm.get('id') as FormControl;\r\n  }\r\n}",
+            "styleUrl": "./app.scss",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [
+                    {
+                        "name": "fb",
+                        "type": "FormBuilder",
+                        "optional": false,
+                        "dotDotDotToken": false,
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "line": 30,
+                "jsdoctags": [
+                    {
+                        "name": "fb",
+                        "type": "FormBuilder",
+                        "optional": false,
+                        "dotDotDotToken": false,
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "extends": [],
+            "accessors": {
+                "name": {
+                    "name": "name",
+                    "getSignature": {
+                        "name": "name",
+                        "type": "",
+                        "returnType": "",
+                        "line": 72
+                    }
+                },
+                "id": {
+                    "name": "id",
+                    "getSignature": {
+                        "name": "id",
+                        "type": "",
+                        "returnType": "",
+                        "line": 76
+                    }
+                }
+            },
+            "templateData": "<div class=\"search\">\r\n  <input\r\n    type=\"text\"\r\n    placeholder=\"Search for books...\"\r\n    [(ngModel)]=\"myQuery\"\r\n  />\r\n  <button (click)=\"onSearch()\">Search</button>\r\n</div>\r\n\r\n<h1>Books ({{ store.booksCount() }})</h1>\r\n<p>Books: {{ store.books() | json }}</p>\r\n    <p>Loading: {{ store.isLoading() }}</p>\r\n\r\n    <!-- 👇 The `DeepSignal` value can be read in the same way as `Signal`. -->\r\n    <p>Pagination: {{ store.filter() | json }}</p>\r\n\r\n    <!-- 👇 Nested signals are created as `DeepSignal` properties. -->\r\n    <p>Query: {{ store.filter.query() }}</p>\r\n    <p>Order: {{ store.filter.order() }}</p>\r\n    <p>Books Count: {{ store.booksCount() }}</p>\r\n\r\n<form [formGroup]=\"contactForm\" (ngSubmit)=\"onSubmit()\">\r\n  <div>\r\n    <app-form-component\r\n      [formControl]=\"name\"\r\n      [placeholder]=\"placeholder\">\r\n    </app-form-component>\r\n\r\n    <app-form-component\r\n      [formControl]=\"id\"\r\n      [placeholder]=\"placeholder\">\r\n    </app-form-component>\r\n  </div>\r\n\r\n  <div>\r\n    <button type=\"submit\">Submit</button>\r\n  </div>\r\n\r\n</form>\r\n\r\n\r\n"
+        },
+        {
+            "name": "FormComponent",
+            "id": "component-FormComponent-d60b8b8d604d232c5fda6156d563e43d912969708228854a45c4e1faf35f22f75c4bac5628fb8101a00c678ab193c6df1d87a93167e4adabd13c1526d1eddc43",
+            "file": "src/app/component/form-component/form-component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [
+                {
+                    "name": ")"
+                }
+            ],
+            "selector": "app-form-component",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./form-component.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "name": "isDisabled",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 23,
+                    "required": false
+                },
+                {
+                    "name": "placeholder",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 21,
+                    "required": true
+                }
+            ],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "value",
+                    "defaultValue": "''",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 19
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "onInputChange",
+                    "args": [
+                        {
+                            "name": "event",
+                            "type": "Event",
+                            "optional": false,
+                            "dotDotDotToken": false,
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 50,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "event",
+                            "type": "Event",
+                            "optional": false,
+                            "dotDotDotToken": false,
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "registerOnChange",
+                    "args": [
+                        {
+                            "name": "fn",
+                            "type": "function",
+                            "optional": false,
+                            "dotDotDotToken": false,
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "function": [
+                                {
+                                    "name": "value",
+                                    "type": "string | null",
+                                    "optional": false,
+                                    "dotDotDotToken": false,
+                                    "deprecated": false,
+                                    "deprecationMessage": ""
+                                }
+                            ]
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 42,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "fn",
+                            "type": "function",
+                            "optional": false,
+                            "dotDotDotToken": false,
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "function": [
+                                {
+                                    "name": "value",
+                                    "type": "string | null",
+                                    "optional": false,
+                                    "dotDotDotToken": false,
+                                    "deprecated": false,
+                                    "deprecationMessage": ""
+                                }
+                            ],
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "registerOnTouched",
+                    "args": [
+                        {
+                            "name": "fn",
+                            "type": "function",
+                            "optional": false,
+                            "dotDotDotToken": false,
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "function": []
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 46,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "fn",
+                            "type": "function",
+                            "optional": false,
+                            "dotDotDotToken": false,
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "function": [],
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "writeValue",
+                    "args": [
+                        {
+                            "name": "value",
+                            "type": "string | null",
+                            "optional": false,
+                            "dotDotDotToken": false,
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 38,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "value",
+                            "type": "string | null",
+                            "optional": false,
+                            "dotDotDotToken": false,
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "CommonModule",
+                    "type": "module"
+                },
+                {
+                    "name": "FormsModule",
+                    "type": "module"
+                },
+                {
+                    "name": "ReactiveFormsModule",
+                    "type": "module"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { CommonModule } from '@angular/common';\r\nimport { Component, forwardRef, input} from '@angular/core';\r\nimport { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule, Validators } from '@angular/forms';\r\n\r\n@Component({\r\n  selector: 'app-form-component',\r\n  imports: [CommonModule, FormsModule, ReactiveFormsModule],\r\n  templateUrl: './form-component.html',\r\n  styleUrl: './form-component.scss',\r\n  providers: [\r\n    {\r\n      provide: NG_VALUE_ACCESSOR,\r\n      useExisting: forwardRef(() => FormComponent),\r\n      multi: true\r\n    }\r\n  ]\r\n})\r\nexport class FormComponent implements ControlValueAccessor{\r\n  value: string = '';\r\n\r\n  placeholder = input.required<string>();\r\n\r\n  isDisabled = input(false);\r\n\r\n  /**\r\n   * @ignore\r\n   * 这是内部使用的私有属性，不对外暴露\r\n   */\r\n  private onChange = (value: string | null) => { };\r\n\r\n  /**\r\n   * @ignore\r\n   * 这是内部使用的私有属性，不对外暴露\r\n   */\r\n  private onTouched = () => { };\r\n\r\n\r\n  writeValue(value: string | null): void {\r\n    this.value = value || '';\r\n  }\r\n\r\n  registerOnChange(fn: (value: string | null) => void): void {\r\n    this.onChange = fn;\r\n  }\r\n\r\n  registerOnTouched(fn: () => void): void {\r\n    this.onTouched = fn;\r\n  }\r\n\r\n  onInputChange(event: Event): void {\r\n    const input = event.target as HTMLInputElement;\r\n    this.value = input.value;\r\n    this.onChange(this.value);  \r\n    this.onTouched();         \r\n  }\r\n}\r\n",
+            "styleUrl": "./form-component.scss",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "implements": [
+                "ControlValueAccessor"
+            ],
+            "templateData": "<div>\r\n    <label>Name:</label>\r\n    <input [value]=\"value\" [disabled]=\"isDisabled()\" [placeholder]=\"placeholder()\" (input)=\"onInputChange($event)\">\r\n</div>\r\n\r\n\r\n\r\n"
+        },
+        {
+            "name": "Search",
+            "id": "component-Search-36f1e173cc9b489a07de94dd1505b5ab229e2bd7135cd266ab1b7c6bd1c70d5779b31ca45f65fea41606912e91f7cb4a5e16f4419cce17b036f9d9e73937d806",
+            "file": "src/app/component/search/search.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-search",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./search.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "CommonModule",
+                    "type": "module"
+                },
+                {
+                    "name": "FormsModule",
+                    "type": "module"
+                },
+                {
+                    "name": "FormComponent",
+                    "type": "component"
+                },
+                {
+                    "name": "ReactiveFormsModule",
+                    "type": "module"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { CommonModule } from '@angular/common';\r\nimport { Component, computed, viewChild } from '@angular/core';\r\nimport { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';\r\nimport { FormComponent } from '../form-component/form-component';\r\n\r\n@Component({\r\n  selector: 'app-search',\r\n  imports: [CommonModule, FormsModule, FormComponent, ReactiveFormsModule, ],\r\n  templateUrl: './search.html',\r\n  styleUrl: './search.scss',\r\n})\r\nexport class Search {\r\n\r\n}\r\n",
+            "styleUrl": "./search.scss",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "templateData": "<div>\r\n  \r\n</div>\r\n"
+        }
+    ],
+    "modules": [],
+    "miscellaneous": {
+        "variables": [
+            {
+                "name": "appConfig",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/app.config.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "ApplicationConfig",
+                "defaultValue": "{\r\n  providers: [\r\n    provideBrowserGlobalErrorListeners(),\r\n    provideRouter(routes)\r\n  ]\r\n}"
+            },
+            {
+                "name": "BookSearchStore",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/store/book-store/book-search-store.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "unknown",
+                "defaultValue": "signalStore(\r\n  { providedIn: 'root' },\r\n  withState(initialState),\r\n  withComputed(({ books, filter }) => ({\r\n    booksCount: computed(() => books().length),\r\n    sortedBooks: computed(() => {\r\n      const direction = filter.order() === 'asc' ? 1 : -1;\r\n      return books().sort(\r\n        (a, b) => direction * a.title.localeCompare(b.title)\r\n      );\r\n    }),\r\n  })),\r\n  // BooksService can be injected within the withMethodsfactory.\r\n  withMethods((store, bookService = inject(BookService)) => ({\r\n    updateQuery(query: string): void {\r\n      patchState(store, (state) => ({\r\n        filter: { ...state.filter, query },\r\n      }));\r\n    },\r\n    updateOrder(order: 'asc' | 'desc'): void {\r\n      patchState(store, (state) => ({\r\n        filter: { ...state.filter, order },\r\n      }));\r\n    },\r\n    async loadAllBooks(): Promise<void> {\r\n      try {\r\n        const books = await bookService.loadAllBooks();\r\n        patchState(store, { books: books, isLoading: false });\r\n      } catch (error) {\r\n        console.error(\"错误:\", error);\r\n        patchState(store, { isLoading: false, action: 'loadAllError' });\r\n      }\r\n    },\r\n    loadByQuery: rxMethod<string>(\r\n      pipe(\r\n        debounceTime(300),\r\n        distinctUntilChanged(),\r\n        tap(() => patchState(store, { isLoading: true , action: null })),\r\n        switchMap((query) => {\r\n          return bookService.getByQuery(query).pipe(\r\n            tapResponse({\r\n              next: (books) => {\r\n                patchState(store, {books: books, action: 'loadByQuerySuccessfully'});\r\n              },\r\n              error: (error) => { \r\n                console.error(\"错误:\", error); \r\n                patchState(store, { action: 'loadByQueryError' });\r\n              },\r\n              finalize: () => patchState(store, { isLoading: false }),\r\n            })\r\n          );\r\n        })\r\n      )\r\n    ),\r\n  }))\r\n)"
+            },
+            {
+                "name": "initialState",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/store/book-store/book-search-store.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "BookSearchState",
+                "defaultValue": "{\r\n  books: [],\r\n  isLoading: false,\r\n  filter: { query: '', order: 'asc' },\r\n  action: null,\r\n}"
+            },
+            {
+                "name": "routes",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/app.routes.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Routes",
+                "defaultValue": "[]"
+            }
+        ],
+        "functions": [],
+        "typealiases": [
+            {
+                "name": "BookSearchState",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
+                "rawtype": "literal type",
+                "file": "src/store/book-store/book-search-store.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "kind": 188
+            }
+        ],
+        "enumerations": [],
+        "groupedVariables": {
+            "src/app/app.config.ts": [
+                {
+                    "name": "appConfig",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/app.config.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "ApplicationConfig",
+                    "defaultValue": "{\r\n  providers: [\r\n    provideBrowserGlobalErrorListeners(),\r\n    provideRouter(routes)\r\n  ]\r\n}"
+                }
+            ],
+            "src/store/book-store/book-search-store.ts": [
+                {
+                    "name": "BookSearchStore",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/store/book-store/book-search-store.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "unknown",
+                    "defaultValue": "signalStore(\r\n  { providedIn: 'root' },\r\n  withState(initialState),\r\n  withComputed(({ books, filter }) => ({\r\n    booksCount: computed(() => books().length),\r\n    sortedBooks: computed(() => {\r\n      const direction = filter.order() === 'asc' ? 1 : -1;\r\n      return books().sort(\r\n        (a, b) => direction * a.title.localeCompare(b.title)\r\n      );\r\n    }),\r\n  })),\r\n  // BooksService can be injected within the withMethodsfactory.\r\n  withMethods((store, bookService = inject(BookService)) => ({\r\n    updateQuery(query: string): void {\r\n      patchState(store, (state) => ({\r\n        filter: { ...state.filter, query },\r\n      }));\r\n    },\r\n    updateOrder(order: 'asc' | 'desc'): void {\r\n      patchState(store, (state) => ({\r\n        filter: { ...state.filter, order },\r\n      }));\r\n    },\r\n    async loadAllBooks(): Promise<void> {\r\n      try {\r\n        const books = await bookService.loadAllBooks();\r\n        patchState(store, { books: books, isLoading: false });\r\n      } catch (error) {\r\n        console.error(\"错误:\", error);\r\n        patchState(store, { isLoading: false, action: 'loadAllError' });\r\n      }\r\n    },\r\n    loadByQuery: rxMethod<string>(\r\n      pipe(\r\n        debounceTime(300),\r\n        distinctUntilChanged(),\r\n        tap(() => patchState(store, { isLoading: true , action: null })),\r\n        switchMap((query) => {\r\n          return bookService.getByQuery(query).pipe(\r\n            tapResponse({\r\n              next: (books) => {\r\n                patchState(store, {books: books, action: 'loadByQuerySuccessfully'});\r\n              },\r\n              error: (error) => { \r\n                console.error(\"错误:\", error); \r\n                patchState(store, { action: 'loadByQueryError' });\r\n              },\r\n              finalize: () => patchState(store, { isLoading: false }),\r\n            })\r\n          );\r\n        })\r\n      )\r\n    ),\r\n  }))\r\n)"
+                },
+                {
+                    "name": "initialState",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/store/book-store/book-search-store.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "BookSearchState",
+                    "defaultValue": "{\r\n  books: [],\r\n  isLoading: false,\r\n  filter: { query: '', order: 'asc' },\r\n  action: null,\r\n}"
+                }
+            ],
+            "src/app/app.routes.ts": [
+                {
+                    "name": "routes",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/app.routes.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Routes",
+                    "defaultValue": "[]"
+                }
+            ]
+        },
+        "groupedFunctions": {},
+        "groupedEnumerations": {},
+        "groupedTypeAliases": {
+            "src/store/book-store/book-search-store.ts": [
+                {
+                    "name": "BookSearchState",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "literal type",
+                    "file": "src/store/book-store/book-search-store.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "kind": 188
+                }
+            ]
+        }
+    },
+    "routes": {
+        "name": "<root>",
+        "kind": "module",
+        "children": []
+    },
+    "coverage": {
+        "count": 0,
+        "status": "low",
+        "files": [
+            {
+                "filePath": "src/app/app.config.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "appConfig",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/app.routes.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "routes",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/app.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "App",
+                "coveragePercent": 0,
+                "coverageCount": "0/11",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/app.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "User",
+                "coveragePercent": 0,
+                "coverageCount": "0/6",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/component/form-component/form-component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "FormComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/8",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/component/search/search.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "Search",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/model/book.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "Book",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "src/service/book-service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "BookService",
+                "coveragePercent": 0,
+                "coverageCount": "0/6",
+                "status": "low"
+            },
+            {
+                "filePath": "src/store/book-store/book-search-store.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "BookSearchStore",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/store/book-store/book-search-store.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "initialState",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/store/book-store/book-search-store.ts",
+                "type": "type alias",
+                "linktype": "miscellaneous",
+                "linksubtype": "typealias",
+                "name": "BookSearchState",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            }
+        ]
+    }
+}
