@@ -28,3 +28,26 @@ export const Default: Story = {
         },
     },
 }
+
+export const Disabled: Story = {
+    render: () => ({
+        props: {
+            placeholder: '请输入姓名',
+            contactForm: new FormBuilder().group({
+                name: [{ value: 'zhangsan', disabled: true }],
+            }),
+        },
+        template: `
+            <form [formGroup]="contactForm">
+                <input formControlName="name" [placeholder]="placeholder" disabled>
+            </form>
+        `   
+    }),
+    parameters: {
+        docs: {
+            description: {
+                story: 'Search 组件的禁用状态，输入框被禁用，无法进行输入。',
+            },
+        },
+    },
+}
