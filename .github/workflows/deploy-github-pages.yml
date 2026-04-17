@@ -2,7 +2,8 @@ name: Build and Publish Storybook to GitHub Pages
 on:
   push:
     branches:
-      - 'xql' # Use specific branch name
+      - 'xql' 
+  workflow_dispatch:
 permissions:
   contents: read
   pages: write
@@ -41,4 +42,3 @@ jobs:
         uses: actions/deploy-pages@v4
         with:
           token: ${{ github.token }}
-          
