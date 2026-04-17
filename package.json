@@ -10,7 +10,8 @@
     "storybook": "ng run angular21-2:storybook",
     "build-storybook": "ng run angular21-2:build-storybook",
     "chromatic": "npx chromatic --project-token=chpt_239b10eb47f123c",
-    "deploy-storybook": "storybook-to-ghpages"
+    "deploy-storybook": "storybook-to-ghpages --output-dir=storybook-static",
+    "deploy": "gh-pages -d storybook-static -f"
   },
   "prettier": {
     "printWidth": 100,
@@ -52,6 +53,7 @@
     "@storybook/angular": "^10.3.5",
     "@storybook/storybook-deployer": "^2.8.16",
     "chromatic": "^16.3.0",
+    "gh-pages": "^6.3.0",
     "jsdom": "^27.1.0",
     "storybook": "^10.3.5",
     "typescript": "~5.9.2",
